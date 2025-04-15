@@ -12,21 +12,20 @@ module.exports.handler = async (event, context) => {
   try {
     await connectToDatabase();
 
-    const product = await ProductModel.findOne({ _id: productId });
+    const isDeleted = await ProductModel.findByIdAndDelete(productId);
 
-    if (!product)
+    if (!isDeleted)
       return apiResponse.error(404, {
         key: "product_not_exists",
         message: "Product not found",
-        details: 'gay'
       });
 
-    return apiResponse.success(200, product);
+    return apiResponse.success(200, isDeleted);
   } catch (error) {
     return apiResponse.error(500, {
       key: "internal_server_error",
       message: "Internal server error",
-      details: error.message,
+      details: error.message
     });
   }
 };

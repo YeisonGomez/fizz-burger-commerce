@@ -27,6 +27,7 @@ functions:
           integration: lambda-proxy
           method: get
           path: /api/product/{id}
+
   CreateProduct:
     handler: src/products/create.handler
     description: Crear producto.
@@ -35,6 +36,7 @@ functions:
           integration: lambda-proxy
           method: post
           path: /api/product
+
   UpdateProduct:
     handler: src/products/update.handler
     description: Actualizar producto.
@@ -42,6 +44,15 @@ functions:
       - http:
           integration: lambda-proxy
           method: put
+          path: /api/product/{id}
+
+  DeleteProduct:
+    handler: src/products/delete.handler
+    description: Eliminar producto.
+    events:
+      - http:
+          integration: lambda-proxy
+          method: delete
           path: /api/product/{id}
 
 plugins:

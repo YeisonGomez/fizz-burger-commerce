@@ -18,8 +18,7 @@ class ApiResponse {
    * @returns {object} Respuesta estructurada
    */
   success(statusCode = 200, body, headers = {}) {
-    if (!body) 
-      throw new Error("The response body is required");
+    if (!body) throw new Error("The response body is required");
 
     return {
       statusCode,
@@ -36,10 +35,9 @@ class ApiResponse {
    * @returns {object} Respuesta de error estructurada
    */
   error(statusCode = 500, error, headers = {}) {
-    if (!error) 
-      throw new Error("The error message is required");
+    if (!error) throw new Error("The error message is required");
 
-    const errorBody = typeof error === "string" ? { error } : { ...error };
+    const errorBody = typeof error === "string" ? { error } : { ...error, details: process.env.NODE_ENV === "development" ? error.details : undefined };
 
     return {
       statusCode,
