@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../../@common/constansts/product.constanst');
 
 const CreateSchema = z.object({
   name: z.string({
@@ -9,11 +10,10 @@ const CreateSchema = z.object({
   .max(100, { message: "Name cannot exceed 100 characters" })
   .transform(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()),
 
-  type: z.string({
+  type: z.enum(PRODUCT_TYPES, {
     required_error: "Type is required",
-    invalid_type_error: "Type must be a string"
-  })
-  .min(2, { message: "Type must be at least 2 characters" }),
+    invalid_type_error: `Type must be one of: ${PRODUCT_TYPES.join(', ')}`
+  }),
 
   price: z.number({
     required_error: "Price is required",
@@ -25,7 +25,8 @@ const CreateSchema = z.object({
     invalid_type_error: "Image must be a valid URL"
   })
   .url({ message: "Image must be a valid URL" })
-  .optional(),
+  .optional()
+  .default(IMAGE_PRODUCT_DEFAULT),
 
   isPromotion: z.boolean({
     invalid_type_error: "isPromotion must be a boolean"

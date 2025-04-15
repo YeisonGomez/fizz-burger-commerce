@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../../@common/constansts/product.constanst');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -15,7 +16,10 @@ const productSchema = new mongoose.Schema({
   type: {
     type: String,
     required: [true, "Type is required"],
-    minlength: [2, "Type must be at least 2 characters"]
+    enum: {
+      values: PRODUCT_TYPES,
+      message: `Type must be one of: ${PRODUCT_TYPES.join(', ')}`
+    }
   },
   price: {
     type: Number,
@@ -24,7 +28,7 @@ const productSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: null
+    default: IMAGE_PRODUCT_DEFAULT
   },
   isPromotion: {
     type: Boolean,

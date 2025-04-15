@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const { PRODUCT_TYPES } = require('../../@common/constansts/product.constanst');
 
 const UpdateSchema = z.object({
   name: z.string({
@@ -10,11 +11,10 @@ const UpdateSchema = z.object({
   .transform(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
   .optional(),
 
-  type: z.string({
+  type: z.enum(PRODUCT_TYPES, {
     required_error: "Type is required",
-    invalid_type_error: "Type must be a string"
+    invalid_type_error: `Type must be one of: ${PRODUCT_TYPES.join(', ')}`
   })
-  .min(2, { message: "Type must be at least 2 characters" })
   .optional(),
 
   price: z.number({
