@@ -17,8 +17,7 @@ module.exports.handler = async (event, context) => {
     if (!product)
       return apiResponse.error(404, {
         key: "product_not_exists",
-        message: "Product not found",
-        details: 'gay'
+        message: "Product not found"
       });
 
     return apiResponse.success(200, product);
