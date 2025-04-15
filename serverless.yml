@@ -35,6 +35,14 @@ functions:
           integration: lambda-proxy
           method: post
           path: /api/product
+  UpdateProduct:
+    handler: src/products/update.handler
+    description: Actualizar producto.
+    events:
+      - http:
+          integration: lambda-proxy
+          method: put
+          path: /api/product/{id}
 
 plugins:
   - serverless-offline

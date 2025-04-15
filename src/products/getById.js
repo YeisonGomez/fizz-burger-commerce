@@ -1,19 +1,18 @@
+const { ObjectId } = require("mongodb");
+
 const ApiResponse = require("../@utils/ApiResponse");
 const { connectToDatabase } = require("../database");
-const { ObjectId } = require("mongodb");
 const ProductModel = require("./models/product");
 
 const apiResponse = new ApiResponse();
 
 module.exports.handler = async (event, context) => {
-  const productId = event.pathParameters.id;
+  const productId = ObjectId.createFromHexString(event.pathParameters.id);
 
   try {
     await connectToDatabase();
 
-    const product = await ProductModel.findOne({
-      _id: ObjectId.createFromHexString(productId),
-    });
+    const product = await ProductModel.findOne({ _id: productId });
 
     if (!product)
       return apiResponse.error(404, {

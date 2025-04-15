@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "El nombre es requerido"],
-    minlength: [2, "El nombre debe tener al menos 2 caracteres"],
-    maxlength: [100, "El nombre no puede exceder 100 caracteres"],
+    required: [true, "Name is required"],
+    minlength: [2, "Name must be at least 2 characters"],
+    maxlength: [100, "Name cannot exceed 100 characters"],
     trim: true,
     set: (value) => {
       if (typeof value !== 'string') return value;
@@ -14,14 +14,13 @@ const productSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    required: [true, "El tipo es requerido"],
-    minlength: [2, "El tipo debe tener al menos 2 caracteres"]
+    required: [true, "Type is required"],
+    minlength: [2, "Type must be at least 2 characters"]
   },
   price: {
     type: Number,
-    required: [true, "El precio es requerido"],
-    min: [0.01, "El precio debe ser mayor a 0"],
-    max: [1000000, "El precio no puede exceder $1,000,000"]
+    required: [true, "Price is required"],
+    min: [0.01, "Price must be greater than 0"]
   },
   image: {
     type: String,
@@ -33,17 +32,25 @@ const productSchema = new mongoose.Schema({
   },
   discount: {
     type: Number,
-    min: [0, "El descuento no puede ser negativo"],
-    max: [100, "El descuento no puede exceder 100%"],
+    min: [0, "Discount cannot be negative"],
+    max: [100, "Discount cannot exceed 100%"],
     default: 0
   },
   ingredients: {
     type: [String],
-    required: [true, "Los ingredientes son requeridos"],
+    required: [true, "Ingredients are required"],
     validate: {
       validator: (v) => v.length > 0 && v.length <= 50,
-      message: "Debe haber entre 1 y 50 ingredientes"
+      message: "There must be between 1 and 50 ingredients"
     }
+  },
+  status: {
+    type: String,
+    enum: {
+      values: ['active', 'inactive'],
+      message: 'Status can only be "active" or "inactive"'
+    },
+    default: 'active'
   },
   createdAt: {
     type: Date,
