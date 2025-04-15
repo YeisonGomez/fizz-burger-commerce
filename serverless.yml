@@ -8,6 +8,9 @@ provider:
   region: ${opt:region, 'us-east-1'}
   endpointType: REGIONAL
   apiName: FizzBurgerChallenge API
+  environment: 
+    NODE_ENV: development
+    MONGODB_URI: mongodb://localhost:27017
 
 custom:
   serverless-offline:
@@ -16,22 +19,22 @@ custom:
     cacheInvalidationRegex: 'node_modules/'
 
 functions:
-  GetExample:
-    handler: src/example/get.handler
-    description: Función de ejemplo para GET. Eliminar cuando ya no se necesite más.
+  GetProduct:
+    handler: src/products/getById.handler
+    description: Consultar producto por id. 
     events:
       - http:
           integration: lambda-proxy
           method: get
-          path: /example
-  PostExample:
-    handler: src/example/post.handler
-    description: Función de ejemplo para POST. Eliminar cuando ya no se necesite más.
+          path: /api/product/{id}
+  CreateProduct:
+    handler: src/products/create.handler
+    description: Crear producto.
     events:
       - http:
           integration: lambda-proxy
           method: post
-          path: /example
+          path: /api/product
 
 plugins:
   - serverless-offline
