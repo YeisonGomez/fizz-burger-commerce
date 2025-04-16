@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "4000:4000" 
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MONGODB_COLLECTION_NAME=${MONGODB_COLLECTION_NAME}
+      - MONGODB_URI=${MONGODB_URI}
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      - ~/.serverlessrc:/root/.serverlessrc:ro
+    command: npx serverless offline --host 0.0.0.0
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: fizzburger
+
+volumes:
+  mongo-data:

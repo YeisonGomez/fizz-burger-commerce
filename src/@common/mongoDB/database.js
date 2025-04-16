@@ -6,9 +6,9 @@ const connectToDatabase = async () => {
 	try {
 		if(mongoose.connection.readyState === 1)
 			return;
-
+		
 		await mongoose.connect(process.env.MONGODB_URI, {
-			dbName: 'janis-products',
+			dbName: process.env.MONGODB_COLLECTION_NAME,
 			serverSelectionTimeoutMS: 5000, // Tiempo de espera para la conexión inicial
 			socketTimeoutMS: 45000 // Tiempo de espera para operaciones
 		});

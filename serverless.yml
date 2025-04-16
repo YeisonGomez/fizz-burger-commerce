@@ -2,19 +2,20 @@ service: FizzBurgerChallenge
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs20.x
   memorySize: 192
   stage: ${opt:stage, 'local'}
   region: ${opt:region, 'us-east-1'}
   endpointType: REGIONAL
   apiName: FizzBurgerChallenge API
   environment: 
-    NODE_ENV: development
-    MONGODB_URI: mongodb://localhost:27017
+    NODE_ENV: ${env:NODE_ENV}
+    MONGODB_URI: ${env:MONGODB_URI}
+    MONGODB_COLLECTION_NAME: ${env:MONGODB_COLLECTION_NAME}
 
 custom:
   serverless-offline:
-    port: 4000
+    httpPort: 4000
     printOutput: true
     cacheInvalidationRegex: 'node_modules/'
 

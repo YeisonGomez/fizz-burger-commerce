@@ -4,7 +4,7 @@
   "description": "Fiz-Burger Challenge",
   "main": "src/index.js",
   "scripts": {
-    "start": "sls offline",
+    "start": "serverless offline start",
     "dev": "nodemon --watch src --exec \"serverless offline start\"",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
