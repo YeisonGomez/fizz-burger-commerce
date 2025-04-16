@@ -7,8 +7,7 @@
     "start": "serverless offline start",
     "dev": "nodemon --watch src --exec \"serverless offline start\"",
     "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "eslint src/ --fix"
   },
   "keywords": [
     "fizzmod",
@@ -19,12 +18,16 @@
   "author": "Fizzmod",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.5.0",
+    "dotenv": "^16.5.0",
     "eslint": "^7.30.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.23.4",
+    "mocha": "^11.1.0",
     "nodemon": "^3.1.9",
     "serverless": "^4.12.0",
-    "serverless-offline": "^14.4.0"
+    "serverless-offline": "^14.4.0",
+    "sinon": "^20.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-api-gateway": "^3.787.0",
