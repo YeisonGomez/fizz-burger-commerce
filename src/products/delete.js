@@ -9,9 +9,10 @@ const ProductModel = require('./models/product');
 const apiResponse = new ApiResponse();
 
 module.exports.handler = async event => {
-	const productId = ObjectId.createFromHexString(event.pathParameters.id);
-
+	
 	try {
+		const productId = ObjectId.createFromHexString(event.pathParameters.id);
+		
 		await connectToDatabase();
 
 		const isDeleted = await ProductModel.findByIdAndDelete(productId);
@@ -23,8 +24,12 @@ module.exports.handler = async event => {
 			});
 		}
 
-		return apiResponse.success(200, isDeleted);
+		return apiResponse.success(200, { 
+			message: 'Product deleted successfully',
+			productDeleted: isDeleted
+		});
 	} catch(error) {
+
 		return apiResponse.error(500, {
 			key: 'internal_server_error',
 			message: 'Internal server error',
