@@ -18,7 +18,7 @@
   "lint-staged": {
     "*.js": [
       "eslint --fix",
-      "npm test -- --silent"
+      "npm run test"
     ]
   },
   "keywords": [
