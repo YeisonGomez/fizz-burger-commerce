@@ -17,7 +17,7 @@ cp .env.example .env
 ### 2. Edit the .env file with the following configuration:
 
 ```bash
-MONGODB_URI=mongodb://mongo:27017/fizzburger
+MONGODB_URI=mongodb://mongo:27017
 ```
 
 ## Starting the Application

@@ -8,7 +8,8 @@
     "dev": "nodemon --watch src --exec \"serverless offline start\"",
     "test": "npx mocha 'src/**/*/*.test.js' --recursive",
     "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "lint:fix": "eslint src/ --fix",
+    "docker": "docker-compose up --build"
   },
   "keywords": [
     "fizzmod",
