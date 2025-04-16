@@ -9,10 +9,10 @@ const ProductModel = require('./models/product');
 const apiResponse = new ApiResponse();
 
 module.exports.handler = async event => {
-	
+
 	try {
 		const productId = ObjectId.createFromHexString(event.pathParameters.id);
-		
+
 		await connectToDatabase();
 
 		const isDeleted = await ProductModel.findByIdAndDelete(productId);
@@ -24,7 +24,7 @@ module.exports.handler = async event => {
 			});
 		}
 
-		return apiResponse.success(200, { 
+		return apiResponse.success(200, {
 			message: 'Product deleted successfully',
 			productDeleted: isDeleted
 		});

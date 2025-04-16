@@ -6,8 +6,20 @@
   "scripts": {
     "start": "serverless offline start",
     "dev": "nodemon --watch src --exec \"serverless offline start\"",
+    "test": "npx mocha 'src/**/*/*.test.js' --recursive",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "npm test -- --silent"
+    ]
   },
   "keywords": [
     "fizzmod",
@@ -23,6 +35,9 @@
     "eslint": "^7.30.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-mocha": "^10.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "mocha": "^11.1.0",
     "nodemon": "^3.1.9",
     "serverless": "^4.12.0",

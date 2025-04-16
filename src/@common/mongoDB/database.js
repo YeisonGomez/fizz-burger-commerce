@@ -6,7 +6,7 @@ const connectToDatabase = async () => {
 	try {
 		if(mongoose.connection.readyState === 1)
 			return;
-		
+
 		await mongoose.connect(process.env.MONGODB_URI, {
 			dbName: process.env.MONGODB_COLLECTION_NAME,
 			serverSelectionTimeoutMS: 5000, // Tiempo de espera para la conexión inicial

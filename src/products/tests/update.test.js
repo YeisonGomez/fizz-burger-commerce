@@ -1,95 +1,110 @@
-"use strict";
+'use strict';
 
-require("dotenv").config();
+require('dotenv').config();
 
-const { expect } = require("chai");
-const sinon = require("sinon");
-const mongoose = require("mongoose");
+const { expect } = require('chai');
+const sinon = require('sinon');
+const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 
-const db = require("../../@common/mongoDB/database");
-const { BaseDto } = require("../../@utils/BaseDto");
-const ApiResponse = require("../../@utils/ApiResponse");
-const ProductModel = require("../models/product");
-const { UpdateSchema } = require("../dto/update.schema");
-const { handler } = require("../update");
-const { PRODUCT_ID_UPDATED } = require("./constants/update.constant");
+const ProductModel = require('../models/product');
+const { handler } = require('../update');
 
-describe("Update Product Handler", () => {
-  let findOneStub;
-  let updateOneStub;
+describe('Update Product By ID Handler', () => {
+	let existingProduct;
 
-  beforeEach(() => {
-    sinon.stub(db, "connectToDatabase").resolves();
+	before(async function() {
+		this.timeout(5000);
+		if(mongoose.connection.readyState === 0) {
+			await mongoose.connect(process.env.MONGODB_URI, {
+				dbName: process.env.MONGODB_COLLECTION_NAME
+			});
+		}
 
-    findOneStub = sinon.stub(ProductModel, "findOne").resolves({
-      _id: new mongoose.Types.ObjectId(PRODUCT_ID_UPDATED),
-    });
+		existingProduct = await ProductModel.create({
+			name: 'Producto test update',
+			type: 'food',
+			price: 9.99,
+			ingredients: ['cheese', 'sauce', 'pepperoni']
+		});
+	});
 
-    updateOneStub = sinon.stub(ProductModel, "updateOne").resolves();
-  });
+	after(async () => {
+		await mongoose.connection.close();
+	});
 
-  afterEach(() => {
-    sinon.restore();
-  });
+	afterEach(() => {
+		sinon.restore();
+	});
 
-  it("should update a product successfully", async () => {
-    const mockEvent = {
-      httpMethod: "PUT",
-      pathParameters: {
-        id: PRODUCT_ID_UPDATED,
-      },
-      body: JSON.stringify({
-        name: "New name product",
-      }),
-    };
+	it('should ensure there are products available for testing', async () => {
+		const count = await ProductModel.countDocuments();
+		expect(count).to.be.at.least(1, 'Expected at least one product in the database');
+	});
 
-    const result = await handler(mockEvent);
-    expect(result.statusCode).to.equal(201);
-    const body = JSON.parse(result.body);
-    expect(body.message).to.equal("Product updated successfully");
-    expect(body).to.have.property("productUpdated", PRODUCT_ID_UPDATED);
-  });
+	it('should update the name of a product', async () => {
+		const mockEvent = {
+			httpMethod: 'PUT',
+			pathParameters: {
+				id: existingProduct._id.toString()
+			},
+			body: JSON.stringify({
+				name: 'Nombre actualizado'
+			})
+		};
 
-  it("should return 404 if product does not exist", async () => {
-    findOneStub.restore(); 
-    sinon.stub(ProductModel, "findOne").resolves(null);
+		const result = await handler(mockEvent);
+		expect(result.statusCode).to.equal(201);
 
-    const mockEvent = {
-      httpMethod: "PUT",
-      pathParameters: {
-        id: "561cf13f1c0f2b5f0b4c0639",
-      },
-      body: JSON.stringify({
-        name: "New name product",
-      }),
-    };
+		const body = JSON.parse(result.body);
+		expect(body.message).to.equal('Product updated successfully');
 
-    const result = await handler(mockEvent);
-    expect(result.statusCode).to.equal(404);
-    const body = JSON.parse(result.body);
+		const updated = await ProductModel.findById(existingProduct._id);
+		expect(updated.name).to.equal('Nombre actualizado');
+	});
 
-    expect(body).to.have.property("key", "product_not_exists");
-    expect(body).to.have.property("message", "Product not found");
-  });
+	it('should throw a validation error when type is missing enum', async () => {
+		const mockEvent = {
+			httpMethod: 'PUT',
+			pathParameters: {
+				id: existingProduct._id.toString()
+			},
+			body: JSON.stringify({
+				type: 'INVALID_TYPE'
+			})
+		};
 
-  it("should throw a validation error when type is missing enum", () => {
-    const invalidData = {
-      type: "fooderror",
-    };
+		try {
+			await handler(mockEvent);
+		} catch(err) {
+			const response = err.toResponse();
+			const parsedBody = JSON.parse(response.body);
 
-    try {
-      new BaseDto(UpdateSchema, invalidData).validate();
-      throw new Error("Validation should have failed but passed");
-    } catch (err) {
-      expect(err).to.be.instanceOf(ApiResponse);
-      const response = err.toResponse();
-      const parsedBody = JSON.parse(response.body);
+			expect(response.statusCode).to.equal(400);
+			expect(parsedBody).to.have.property('key', 'validation_error');
+			expect(parsedBody.errors).to.be.an('array');
+			expect(parsedBody.errors[0]).to.have.property('field', 'type');
+			expect(parsedBody.errors[0].message).to.include('Invalid enum value. Expected');
+		}
+	});
 
-      expect(response.statusCode).to.equal(400);
-      expect(parsedBody).to.have.property("key", "validation_error");
-      expect(parsedBody.errors).to.be.an("array");
-      expect(parsedBody.errors[0]).to.have.property("field", "type");
-      expect(parsedBody.errors[0].message).to.include("Invalid enum value. Expected");
-    }
-  });
+	it('should return 404 if product does not exist', async () => {
+		const fakeId = new ObjectId().toString();
+
+		const mockEvent = {
+			httpMethod: 'PUT',
+			pathParameters: {
+				id: fakeId
+			},
+			body: JSON.stringify({
+				name: 'No importa'
+			})
+		};
+
+		const result = await handler(mockEvent);
+		expect(result.statusCode).to.equal(404);
+
+		const body = JSON.parse(result.body);
+		expect(body).to.have.property('key', 'product_not_exists');
+	});
 });

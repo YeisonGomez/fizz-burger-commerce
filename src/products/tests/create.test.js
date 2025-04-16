@@ -4,22 +4,16 @@ require('dotenv').config();
 
 const { expect } = require('chai');
 const sinon = require('sinon');
-const mongoose = require('mongoose');
 
 const db = require('../../@common/mongoDB/database');
 const { BaseDto } = require('../../@utils/BaseDto');
 const ApiResponse = require('../../@utils/ApiResponse');
-const ProductModel = require('../models/product');
 const { CreateSchema } = require('../dto/create.schema');
-const { handler } = require('../create'); 
+const { handler } = require('../create');
 
 describe('Product Create Handler', () => {
 	beforeEach(() => {
 		sinon.stub(db, 'connectToDatabase').resolves();
-
-		sinon.stub(ProductModel, 'create').resolves({
-			_id: new mongoose.Types.ObjectId()
-		});
 	});
 
 	afterEach(() => {
@@ -30,13 +24,13 @@ describe('Product Create Handler', () => {
 		const mockEvent = {
 			httpMethod: 'POST',
 			body: JSON.stringify({
-        name: "Hamburguesa",
+				name: 'Hamburguesa',
 				type: 'food',
 				price: 9.99,
 				ingredients: ['cheese', 'sauce', 'pepperoni']
 			})
 		};
-    
+
 		const result = await handler(mockEvent);
 		expect(result.statusCode).to.equal(201);
 		const body = JSON.parse(result.body);
@@ -44,7 +38,7 @@ describe('Product Create Handler', () => {
 		expect(body.newProductId).to.exist;
 	});
 
-  it('should throw a validation error when name is missing', () => {
+	it('should throw a validation error when name is missing', () => {
 		const invalidData = {
 			type: 'food',
 			price: 9.99,
@@ -54,7 +48,7 @@ describe('Product Create Handler', () => {
 		try {
 			new BaseDto(CreateSchema, invalidData).validate();
 			throw new Error('Validation should have failed but passed');
-		} catch (err) {
+		} catch(err) {
 			expect(err).to.be.instanceOf(ApiResponse);
 			const response = err.toResponse();
 			const parsedBody = JSON.parse(response.body);
@@ -67,9 +61,9 @@ describe('Product Create Handler', () => {
 		}
 	});
 
-  it('should throw a validation error when type is missing enum', () => {
+	it('should throw a validation error when type is missing enum', () => {
 		const invalidData = {
-      name: 'Hamburguesa',
+			name: 'Hamburguesa',
 			type: 'fooderror',
 			price: 9.99,
 			ingredients: ['cheese', 'sauce']
@@ -78,7 +72,7 @@ describe('Product Create Handler', () => {
 		try {
 			new BaseDto(CreateSchema, invalidData).validate();
 			throw new Error('Validation should have failed but passed');
-		} catch (err) {
+		} catch(err) {
 			expect(err).to.be.instanceOf(ApiResponse);
 			const response = err.toResponse();
 			const parsedBody = JSON.parse(response.body);

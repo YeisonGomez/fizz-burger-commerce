@@ -5,12 +5,15 @@ module.exports = {
 
 	env: {
 		node: true,
-		es6: true
+		es6: true,
+		mocha: true
 	},
 
 	parserOptions: {
 		sourceType: 'script'
 	},
+
+	plugins: ['mocha'],
 
 	rules: {
 		strict: ['error', 'global'],
@@ -85,5 +88,7 @@ module.exports = {
 		'no-prototype-builtins': 0,
 		'function-paren-newline': 0,
 		'no-await-in-loop': 0,
+
+		'no-unused-expressions': 'off'
 	}
 };
