@@ -28,6 +28,15 @@ functions:
           method: get
           path: /api/product/{id}
 
+  GetProducts:
+    handler: src/products/getAll.handler
+    description: Consultar productos por filtros. 
+    events:
+      - http:
+          integration: lambda-proxy
+          method: get
+          path: /api/product
+
   CreateProduct:
     handler: src/products/create.handler
     description: Crear producto.

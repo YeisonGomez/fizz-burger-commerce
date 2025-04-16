@@ -21,7 +21,7 @@ class BaseDto {
         errors
       });
     }
-
+    
     return result.data;
   }
 }

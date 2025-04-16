@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../../@common/constansts/product.constanst');
+const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../constansts/product.constanst');
 
 const productSchema = new mongoose.Schema({
   name: {

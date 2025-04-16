@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../../@common/constansts/product.constanst');
+const { PRODUCT_TYPES, IMAGE_PRODUCT_DEFAULT } = require('../constansts/product.constanst');
 
 const CreateSchema = z.object({
   name: z.string({

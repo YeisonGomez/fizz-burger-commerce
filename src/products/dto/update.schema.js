@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { PRODUCT_TYPES } = require('../../@common/constansts/product.constanst');
+const { PRODUCT_TYPES } = require('../constansts/product.constanst');
 
 const UpdateSchema = z.object({
   name: z.string({
