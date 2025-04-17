@@ -10,7 +10,9 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "docker": "docker-compose up --build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "validate": "npm run lint && npm run test",
+
   },
   "husky": {
     "hooks": {
@@ -19,9 +21,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
-      "npm run lint:fix",
-      "npm test -- --silent"
+      "npm run validate"
     ]
   },
   "keywords": [
