@@ -5,12 +5,15 @@ module.exports = {
 
 	env: {
 		node: true,
-		es6: true
+		es6: true,
+		mocha: true
 	},
 
 	parserOptions: {
 		sourceType: 'script'
 	},
+
+	plugins: ['mocha'],
 
 	rules: {
 		strict: ['error', 'global'],
@@ -71,7 +74,7 @@ module.exports = {
 		'no-underscore-dangle': ['warn', {
 			allowAfterThis: true,
 			allowAfterSuper: true,
-			allow: ['_call', '__rootpath', '_where']
+			allow: ['_call', '__rootpath', '_where', '_id']
 		}],
 		'no-new': 0,
 		'func-names': 0,
@@ -85,5 +88,7 @@ module.exports = {
 		'no-prototype-builtins': 0,
 		'function-paren-newline': 0,
 		'no-await-in-loop': 0,
+
+		'no-unused-expressions': 'off'
 	}
 };

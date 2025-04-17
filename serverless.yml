@@ -2,36 +2,68 @@ service: FizzBurgerChallenge
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs20.x
   memorySize: 192
   stage: ${opt:stage, 'local'}
   region: ${opt:region, 'us-east-1'}
   endpointType: REGIONAL
   apiName: FizzBurgerChallenge API
+  environment: 
+    NODE_ENV: ${env:NODE_ENV}
+    MONGODB_URI: ${env:MONGODB_URI}
+    MONGODB_COLLECTION_NAME: ${env:MONGODB_COLLECTION_NAME}
 
 custom:
   serverless-offline:
-    port: 4000
+    httpPort: 4000
     printOutput: true
     cacheInvalidationRegex: 'node_modules/'
 
 functions:
-  GetExample:
-    handler: src/example/get.handler
-    description: Función de ejemplo para GET. Eliminar cuando ya no se necesite más.
+  GetProduct:
+    handler: src/products/getById.handler
+    description: Consultar producto por id. 
     events:
       - http:
           integration: lambda-proxy
           method: get
-          path: /example
-  PostExample:
-    handler: src/example/post.handler
-    description: Función de ejemplo para POST. Eliminar cuando ya no se necesite más.
+          path: /api/product/{id}
+
+  GetProducts:
+    handler: src/products/getAll.handler
+    description: Consultar productos por filtros. 
+    events:
+      - http:
+          integration: lambda-proxy
+          method: get
+          path: /api/product
+
+  CreateProduct:
+    handler: src/products/create.handler
+    description: Crear producto.
     events:
       - http:
           integration: lambda-proxy
           method: post
-          path: /example
+          path: /api/product
+
+  UpdateProduct:
+    handler: src/products/update.handler
+    description: Actualizar producto.
+    events:
+      - http:
+          integration: lambda-proxy
+          method: put
+          path: /api/product/{id}
+
+  DeleteProduct:
+    handler: src/products/delete.handler
+    description: Eliminar producto.
+    events:
+      - http:
+          integration: lambda-proxy
+          method: delete
+          path: /api/product/{id}
 
 plugins:
   - serverless-offline

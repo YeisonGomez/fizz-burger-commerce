@@ -1,0 +1,132 @@
+{
+  "/usr/src/app/serverless.yml": {
+    "versionFramework": "4.13.0",
+    "servicePath": "/usr/src/app/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "FizzBurgerChallenge",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "memorySize": 192,
+        "stage": "local",
+        "region": "us-east-1",
+        "endpointType": "REGIONAL",
+        "apiName": "FizzBurgerChallenge API",
+        "environment": {
+          "NODE_ENV": "${env:NODE_ENV}",
+          "MONGODB_URI": "${env:MONGODB_URI}",
+          "MONGODB_COLLECTION_NAME": "${env:MONGODB_COLLECTION_NAME}"
+        }
+      },
+      "custom": {
+        "serverless-offline": {
+          "port": 4000,
+          "host": "0.0.0.0",
+          "printOutput": true,
+          "cacheInvalidationRegex": "node_modules/"
+        }
+      },
+      "functions": {
+        "GetProduct": {
+          "handler": "src/products/getById.handler",
+          "description": "Consultar producto por id.",
+          "events": [
+            {
+              "http": {
+                "integration": "lambda-proxy",
+                "method": "get",
+                "path": "/api/product/{id}"
+              }
+            }
+          ]
+        },
+        "GetProducts": {
+          "handler": "src/products/getAll.handler",
+          "description": "Consultar productos por filtros.",
+          "events": [
+            {
+              "http": {
+                "integration": "lambda-proxy",
+                "method": "get",
+                "path": "/api/product"
+              }
+            }
+          ]
+        },
+        "CreateProduct": {
+          "handler": "src/products/create.handler",
+          "description": "Crear producto.",
+          "events": [
+            {
+              "http": {
+                "integration": "lambda-proxy",
+                "method": "post",
+                "path": "/api/product"
+              }
+            }
+          ]
+        },
+        "UpdateProduct": {
+          "handler": "src/products/update.handler",
+          "description": "Actualizar producto.",
+          "events": [
+            {
+              "http": {
+                "integration": "lambda-proxy",
+                "method": "put",
+                "path": "/api/product/{id}"
+              }
+            }
+          ]
+        },
+        "DeleteProduct": {
+          "handler": "src/products/delete.handler",
+          "description": "Eliminar producto.",
+          "events": [
+            {
+              "http": {
+                "integration": "lambda-proxy",
+                "method": "delete",
+                "path": "/api/product/{id}"
+              }
+            }
+          ]
+        }
+      },
+      "plugins": [
+        "serverless-offline"
+      ]
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "memorySize": 192,
+      "stage": "local",
+      "region": "us-east-1",
+      "endpointType": "REGIONAL",
+      "apiName": "FizzBurgerChallenge API",
+      "environment": {
+        "NODE_ENV": "${env:NODE_ENV}",
+        "MONGODB_URI": "${env:MONGODB_URI}",
+        "MONGODB_COLLECTION_NAME": "${env:MONGODB_COLLECTION_NAME}"
+      }
+    },
+    "error": {
+      "message": "You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".",
+      "stack": "Error: You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".\n    at Authentication.getAuthenticatedData (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:557:10892)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Authentication.authenticate (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:559:21808)\n    at async TraditionalRunner.resolveVariablesAndAuthenticate (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:563:2377)\n    at async TraditionalRunner.run (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:1136:27896)\n    at async route (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:1167:2779)\n    at async Object.run (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:1168:3661)\n    at async run2 (file:///root/.serverless/releases/4.13.0/package/dist/sf-core.js:1168:4814)"
+    },
+    "serviceRawFile": "service: FizzBurgerChallenge\n\nprovider:\n  name: aws\n  runtime: nodejs20.x\n  memorySize: 192\n  stage: ${opt:stage, 'local'}\n  region: ${opt:region, 'us-east-1'}\n  endpointType: REGIONAL\n  apiName: FizzBurgerChallenge API\n  environment: \n    NODE_ENV: ${env:NODE_ENV}\n    MONGODB_URI: ${env:MONGODB_URI}\n    MONGODB_COLLECTION_NAME: ${env:MONGODB_COLLECTION_NAME}\n\ncustom:\n  serverless-offline:\n    port: 4000\n    host: 0.0.0.0\n    printOutput: true\n    cacheInvalidationRegex: 'node_modules/'\n\nfunctions:\n  GetProduct:\n    handler: src/products/getById.handler\n    description: Consultar producto por id. \n    events:\n      - http:\n          integration: lambda-proxy\n          method: get\n          path: /api/product/{id}\n\n  GetProducts:\n    handler: src/products/getAll.handler\n    description: Consultar productos por filtros. \n    events:\n      - http:\n          integration: lambda-proxy\n          method: get\n          path: /api/product\n\n  CreateProduct:\n    handler: src/products/create.handler\n    description: Crear producto.\n    events:\n      - http:\n          integration: lambda-proxy\n          method: post\n          path: /api/product\n\n  UpdateProduct:\n    handler: src/products/update.handler\n    description: Actualizar producto.\n    events:\n      - http:\n          integration: lambda-proxy\n          method: put\n          path: /api/product/{id}\n\n  DeleteProduct:\n    handler: src/products/delete.handler\n    description: Eliminar producto.\n    events:\n      - http:\n          integration: lambda-proxy\n          method: delete\n          path: /api/product/{id}\n\nplugins:\n  - serverless-offline\n",
+    "command": [
+      "offline"
+    ],
+    "options": {
+      "host": "0.0.0.0"
+    },
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}
