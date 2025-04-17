@@ -19,7 +19,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix",
+      "npm eslint --fix",
       "npm test -- --silent"
     ]
   },
