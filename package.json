@@ -10,18 +10,7 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "docker": "docker-compose up --build",
-    "prepare": "husky",
-    "validate": "npm run lint && npm run test"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "npm run validate"
-    ]
+    "prepare": "husky"
   },
   "keywords": [
     "fizzmod",
