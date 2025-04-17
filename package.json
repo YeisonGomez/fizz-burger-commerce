@@ -11,6 +11,17 @@
     "lint:fix": "eslint src/ --fix",
     "docker": "docker-compose up --build"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "npm test -- --silent"
+    ]
+  },
   "keywords": [
     "fizzmod",
     "burger",
