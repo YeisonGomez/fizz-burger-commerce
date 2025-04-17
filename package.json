@@ -9,7 +9,8 @@
     "test": "npx mocha 'src/**/*/*.test.js' --recursive",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "docker": "docker-compose up --build"
+    "docker": "docker-compose up --build",
+    "prepare": "husky"
   },
   "husky": {
     "hooks": {
